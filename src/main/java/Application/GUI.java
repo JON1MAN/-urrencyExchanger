@@ -1,6 +1,9 @@
 package Application;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 enum Currencies{
     USD, //(United States Dollar"),
@@ -20,6 +23,7 @@ enum Currencies{
     SGD, //("Singapore Dollar");
 }
 public class GUI extends JFrame {
+    //array of Strings that consists of currencies
     private final String[] currencyAbbreviations = {
             "USD",
             "EUR",
@@ -44,7 +48,7 @@ public class GUI extends JFrame {
         wolfOfWallStreet.setIcon(bankLogo);
         wolfOfWallStreet.setBounds(77,50,247,300);
 
-        JComboBox fromComboBox = new JComboBox(Currencies.values());
+        JComboBox fromComboBox = new JComboBox(currencyAbbreviations);
         fromComboBox.setBounds(77, 370, 65, 20);
         fromComboBox.setSelectedIndex(0);
 
@@ -52,20 +56,39 @@ public class GUI extends JFrame {
         toComboBox.setBounds(258, 370, 65, 20);
         toComboBox.setSelectedIndex(1);
 
-        JTextField fromAmount = new JTextField();
-        fromAmount.setBounds(60, 400, 100, 20);
+        JTextField fromAmountTextField = new JTextField();
+        fromAmountTextField.setBounds(60, 400, 100, 20);
 
-        JTextField resultAmount = new JTextField();
-        resultAmount.setBounds(241, 400, 100, 20);
+        JTextField resultAmountTextField = new JTextField();
+        resultAmountTextField.setBounds(241, 400, 100, 20);
 
         ImageIcon aprEqLogo = new ImageIcon("src/images/approximatelyEquals.jpg");
-        JLabel aproxEq = new JLabel();
-        aproxEq.setIcon(aprEqLogo);
-        aproxEq.setBounds(191,400,20,20);
+        JLabel aproxEqLabel = new JLabel();
+        aproxEqLabel.setIcon(aprEqLogo);
+        aproxEqLabel.setBounds(191,400,20,20);
+
+        JButton convertButton = new JButton();
+        convertButton.setIcon(aprEqLogo);
+        convertButton.setBounds(191,400,20,20);
+        convertButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                try {
+                    resultAmountTextField.setText(Exchanger.getConvert(
+                            currencyAbbreviations[fromComboBox.getSelectedIndex()],
+                            currencyAbbreviations[toComboBox.getSelectedIndex()],
+                            fromAmountTextField.getText() ));
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+
 
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
         frame.setSize(400, 600);
+        frame.setBackground(Color.white);
         frame.setLocationRelativeTo(null);
         frame.setLayout(null);
         frame.setResizable(false);
@@ -73,9 +96,10 @@ public class GUI extends JFrame {
         frame.add(wolfOfWallStreet);
         frame.add(fromComboBox);
         frame.add(toComboBox);
-        frame.add(fromAmount);
-        frame.add(resultAmount);
-        frame.add(aproxEq);
+        frame.add(fromAmountTextField);
+        frame.add(resultAmountTextField);
+        frame.add(aproxEqLabel);
+        frame.add(convertButton);
 
         frame.setVisible(true);
 

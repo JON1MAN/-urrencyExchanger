@@ -1,13 +1,13 @@
 package Application;
 
 public class Results {
-    private double result;
+    private String result;
 
-    public double getResult() {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(double result) {
+    public void setResult(String result) {
         this.result = result;
     }
 }
